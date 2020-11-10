@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 // prettier-ignore
 const experiment = {
   boards: [
@@ -301,6 +303,7 @@ const PLAY_DURATION = 10 * 1000;
 class ExperimentRunner {
   constructor(experiment) {
     this.experiment = experiment;
+    this.id = nanoid();
     this.index = 0;
     this.container = document.getElementById("container");
     this.templates = {
@@ -405,6 +408,26 @@ class ExperimentRunner {
         actions: {
           onEnter() {
             console.log("enter: board.done");
+            const id = this.id;
+            const guesses = this.container.querySelectorAll(".pick").length;
+            const correct = this.container.querySelectorAll(".pick.real")
+              .length;
+            const count = this.board.count;
+            const total = this.board.board.length;
+            const color = this.board.color;
+
+            console.log(
+              `id: ${id}, guesses: ${guesses}, correct: ${correct}, count: ${count}, total: ${total}, color: ${color}`
+            );
+            google.script.run.saveTrial({
+              id: id,
+              guesses: guesses,
+              correct: correct,
+              count: count,
+              total: total,
+              color: color
+            });
+
             if (this.nextBoard()) {
               this.boardStateMachine.transition("done", "wait");
             } else {
@@ -497,7 +520,10 @@ function cell(children) {
   return `<div class="${classes.join(" ")}"></div>`;
 }
 
-Handlebars.registerPartial("score", document.getElementById("template-score").innerHTML);
+Handlebars.registerPartial(
+  "score",
+  document.getElementById("template-score").innerHTML
+);
 Handlebars.registerHelper("grid", function (board, size, options) {
   console.log(size);
   return grid(board.map((item) => cell(options.fn(item))).join("\n"), size);

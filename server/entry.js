@@ -14,5 +14,5 @@ function saveTrial(result) {
   const sht = app.getSheetByName("Results");
   const email = Session.getActiveUser().getEmail() || "n/a";
   const stamp = new Date();
-  sht.appendRow([email, stamp, 1, "#ff0000", 25, 6, 1]);
+  sht.appendRow([email, stamp, result.id, result.color, result.total, result.count, result.guesses, result.correct]);
 }
