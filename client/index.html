@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.scss" />
+  </head>
+  <body>
+    <div id="container">Loading...</div>
+    <script id="template-score" type="text/x-handlebars-template">
+      <div>
+        Step: {{index}} of {{count}}
+      </div>
+      <div>
+        Grid: {{board.width}}×{{board.height}}
+      </div>
+      <div>
+        Pick: {{board.count}}
+      </div>
+    </script>
+    <script id="template-board" type="text/x-handlebars-template">
+      <div id="ready" class="screen">
+        {{> score }}
+        <p>
+          You are about to be shown a {{board.width}}×{{board.height}} board. {{ board.count }} 
+          squares will be highlighted for 5 seconds. Then you will have 10 seconds to click on 
+          the squares that were highlighted.
+        </p>
+        <p>
+          Click anywhere to begin.
+        </p>
+      </div>
+      {{> score }}
+      {{#grid board.board board.width}}
+        {{this}}
+      {{/grid}}
+    </script>
+    <script id="template-thank" type="text/x-handlebars-template">
+      <div>All done. Thanks!</div>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
